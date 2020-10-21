@@ -65,7 +65,7 @@ void loop()  {
   Serial.println("aaaa");
 
   if (slaveConnected(SLAVE_ADDRESS)){
-    Serial.println("ab");
+    Serial.println("slaveConnected returned true");
     Wire.requestFrom(SLAVE_ADDRESS, SLAVE_BUFFER_SIZE);   //gathers data comming from slave  
     int i = 0; 
     Serial.println("b");
@@ -106,7 +106,9 @@ void loop()  {
 
 
 bool slaveConnected(int address){
+  Serial.println("before beginTransmission");
   Wire.beginTransmission (address);
+  Serial.println("after beginTransmission");
   return Wire.endTransmission() == 0;
 }
 
