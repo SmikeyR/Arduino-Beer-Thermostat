@@ -1,6 +1,6 @@
 #include <Wire.h>
 
-//#include <Encoder.h>
+#include <Encoder.h>
 //#define ENCODER_DO_NOT_USE_INTERRUPTS
 //Encoder myEnc(5, 6); //2 and 3 are interrupt pins in UNO
 
@@ -15,7 +15,9 @@ const byte interruptPin = 3;
 int AC_LOAD = 8;             // Output to Opto Triac pin
 volatile int dimming = 128;  // Dimming level (0-128)  0 = ON, 128 = OFF
 
-char t[5]={};               //empty array where for the data comming from slave
+
+const byte SLAVE_BUFFER_SIZE = 5;
+char slaveBuffer[SLAVE_BUFFER_SIZE]={};               //empty array where for the data comming from slave
 
 volatile int tempSet = 50; //initial threshold temperature
 
@@ -23,16 +25,26 @@ void setup()
 {
   Serial.begin(9600);
   
+  setupPins();   
+  setupDisplays();
+
+  Wire.begin();
+}
+
+void setupPins(){
   pinMode(AC_LOAD, OUTPUT); // Set AC Load pin as output
   attachInterrupt(digitalPinToInterrupt(interruptPin), cross, FALLING);   
-   
+  
+}
+
+void setupDisplays(){
   displayYellow1.setBrightness(2); //BRIGHTEST = 7;
   displayYellow1.clear();
   displayGreen.setBrightness(2); 
   displayGreen.clear();
-
-  Wire.begin();
 }
+
+
 
 void loop()  {
   dimming = map(analogRead(A0), 0, 1024, 0, 10000); //map from pot
@@ -40,12 +52,16 @@ void loop()  {
   Wire.requestFrom(8, 5);   //gathers data comming from slave
   int i = 0; 
     while (Wire.available()) { 
-    t[i] = Wire.read();   // every character that arrives stored in "t"
-    i = i + 1;
+      slaveBuffer[i] = Wire.read();   // every character that arrives stored in "t"
+      i = i + 1;
+      if (i > SLAVE_BUFFER_SIZE){
+        Serial.println("Trying to overflow the slave buffer, please see how the fuck this shit happened");
+        break;
+      }
     }
   
-  displayYellow1.showNumberDecEx(atof(t)*100, 0b01000000, false);
-  //displayGreen.showNumberDecEx(atof(t)*100, 0b01000000, false);
+  displayYellow1.showNumberDecEx(atof(slaveBuffer)*100, 0b01000000, false);
+  //displayGreen.showNumberDecEx(atof(slaveBuffer)*100, 0b01000000, false);
       
 //  int newPosition = myEnc.read();
 //  if (newPosition != tempSet) {
