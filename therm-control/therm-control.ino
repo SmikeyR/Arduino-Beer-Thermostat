@@ -30,6 +30,8 @@ volatile int dimming = 128;  // Dimming level (0-128)  0 = ON, 128 = OFF
 const byte SLAVE_BUFFER_SIZE = 5;
 char slaveBuffer[SLAVE_BUFFER_SIZE]={};               //empty array where for the data comming from slave
 
+const byte SLAVE_ADDRESS = 8;
+
 volatile int tempSet = 50; //initial threshold temperature
 
 void setup()
@@ -61,18 +63,27 @@ void loop()  {
   Serial.println("a");
   dimming = map(analogRead(A0), 0, 1024, 0, 10000); //map from pot
   Serial.println("aaaa");
-  
-  Wire.requestFrom(8, SLAVE_BUFFER_SIZE);   //gathers data comming from slave
-  int i = 0; 
-  Serial.println("b");
-  while (Wire.available()) { 
-    slaveBuffer[i] = Wire.read();   // every character that arrives stored in "t"
-    i = i + 1;
-    if (i > SLAVE_BUFFER_SIZE){
-      Serial.println("Trying to overflow the slave buffer, please see how the fuck this shit happened");
-      break;
+
+  if (slaveConnected(SLAVE_ADDRESS)){
+    Wire.requestFrom(SLAVE_ADDRESS, SLAVE_BUFFER_SIZE);   //gathers data comming from slave  
+    int i = 0; 
+    Serial.println("b");
+    while (Wire.available()) { 
+      slaveBuffer[i] = Wire.read();   // every character that arrives stored in "t"
+      i = i + 1;
+      if (i > SLAVE_BUFFER_SIZE){
+        Serial.println("Trying to overflow the slave buffer, please see how the fuck this shit happened");
+        break;
+      }
     }
+
+  } else {
+    Serial.println("The fucking slave is sleeping, wake the motherfucker up!!!!!");
   }
+  
+  
+
+  
   Serial.println("c");
   displayYellow1.showNumberDecEx(atof(slaveBuffer)*100, 0b01000000, false);
   //displayGreen.showNumberDecEx(atof(slaveBuffer)*100, 0b01000000, false);
@@ -90,6 +101,12 @@ void loop()  {
  
   //Serial.println(dimming);
   //displayGreen.showNumberDecEx(tempSet, 0b01000000, false);
+}
+
+
+bool slaveConnected(int address){
+  Wire.beginTransmission (address);
+  return Wire.endTransmission() == 0;
 }
 
 
