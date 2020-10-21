@@ -2,7 +2,18 @@
 
 #include <Encoder.h>
 //#define ENCODER_DO_NOT_USE_INTERRUPTS
-//Encoder myEnc(5, 6); //2 and 3 are interrupt pins in UNO
+
+
+/*
+ * PINS SETUP:
+ * 2, 5 - encoder. Why? Because pin 2 accepts interrupts, and encoder with first interrupt-accepting pin gives OK performance (https://www.pjrc.com/teensy/td_libs_Encoder.html)
+ * 
+ */
+
+
+
+
+Encoder myEnc(2, 5); //2 and 3 are interrupt pins in UNO
 
 #include <TM1637Display.h>
 #define CLK 10
@@ -64,6 +75,10 @@ void loop()  {
   //displayGreen.showNumberDecEx(atof(slaveBuffer)*100, 0b01000000, false);
       
 //  int newPosition = myEnc.read();
+  long encoderPosition = readEncoderValue();
+  Serial.println(encoderPosition);
+
+  delay(200);
 //  if (newPosition != tempSet) {
 //    tempSet = newPosition;
 //    Serial.println(tempSet);
@@ -72,6 +87,12 @@ void loop()  {
   //Serial.println(dimming);
   //displayGreen.showNumberDecEx(tempSet, 0b01000000, false);
 }
+
+
+long readEncoderValue(){
+  return myEnc.read();
+}
+
 
 void cross()  //function to be fired at the zero crossing
 {
