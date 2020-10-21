@@ -58,24 +58,27 @@ void setupDisplays(){
 
 
 void loop()  {
+  Serial.println("a");
   dimming = map(analogRead(A0), 0, 1024, 0, 10000); //map from pot
   
   Wire.requestFrom(8, 5);   //gathers data comming from slave
   int i = 0; 
-    while (Wire.available()) { 
-      slaveBuffer[i] = Wire.read();   // every character that arrives stored in "t"
-      i = i + 1;
-      if (i > SLAVE_BUFFER_SIZE){
-        Serial.println("Trying to overflow the slave buffer, please see how the fuck this shit happened");
-        break;
-      }
+  Serial.println("b");
+  while (Wire.available()) { 
+    slaveBuffer[i] = Wire.read();   // every character that arrives stored in "t"
+    i = i + 1;
+    if (i > SLAVE_BUFFER_SIZE){
+      Serial.println("Trying to overflow the slave buffer, please see how the fuck this shit happened");
+      break;
     }
-  
+  }
+  Serial.println("c");
   displayYellow1.showNumberDecEx(atof(slaveBuffer)*100, 0b01000000, false);
   //displayGreen.showNumberDecEx(atof(slaveBuffer)*100, 0b01000000, false);
       
 //  int newPosition = myEnc.read();
   long encoderPosition = readEncoderValue();
+  Serial.println("d");
   Serial.println(encoderPosition);
 
   delay(200);
