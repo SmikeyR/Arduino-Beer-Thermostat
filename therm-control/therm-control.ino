@@ -60,8 +60,9 @@ void setupDisplays(){
 void loop()  {
   Serial.println("a");
   dimming = map(analogRead(A0), 0, 1024, 0, 10000); //map from pot
+  Serial.println("aaaa");
   
-  Wire.requestFrom(8, 5);   //gathers data comming from slave
+  Wire.requestFrom(8, SLAVE_BUFFER_SIZE);   //gathers data comming from slave
   int i = 0; 
   Serial.println("b");
   while (Wire.available()) { 
