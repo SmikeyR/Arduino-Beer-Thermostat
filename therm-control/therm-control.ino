@@ -106,6 +106,7 @@ void loop()  {
 
 
 bool slaveConnected(int address){
+  return false;
   Serial.println("before beginTransmission");
   Wire.beginTransmission (address);
   Serial.println("after beginTransmission");
