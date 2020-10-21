@@ -65,6 +65,7 @@ void loop()  {
   Serial.println("aaaa");
 
   if (slaveConnected(SLAVE_ADDRESS)){
+    Serial.println("ab");
     Wire.requestFrom(SLAVE_ADDRESS, SLAVE_BUFFER_SIZE);   //gathers data comming from slave  
     int i = 0; 
     Serial.println("b");
