@@ -14,6 +14,7 @@
 
 
 Encoder myEnc(2, 5); //2 and 3 are interrupt pins in UNO
+//long oldPosition  = -999;
 
 #include <TM1637Display.h>
 #define CLK 10
@@ -78,28 +79,20 @@ void loop()  {
       }
     }
   } else {
-    Serial.println("The fucking slave is sleeping, wake the motherfucker up!!!!!");
+    Serial.println("The slave is sleeping, wake it up!!!!!");
   }
   
-
   
   Serial.println("c");
   displayYellow1.showNumberDecEx(atof(slaveBuffer)*100, 0b01000000, false);
   //displayGreen.showNumberDecEx(atof(slaveBuffer)*100, 0b01000000, false);
-      
-//  int newPosition = myEnc.read();
-  long encoderPosition = readEncoderValue();
-  Serial.println("d");
-  Serial.println(encoderPosition);
+        
+  long newPosition = readEncoderValue();
+  displayGreen.showNumberDecEx(newPosition, false);
+  Serial.println(newPosition);
+  
+  delay(50);
 
-  delay(200);
-//  if (newPosition != tempSet) {
-//    tempSet = newPosition;
-//    Serial.println(tempSet);
-//  }
- 
-  //Serial.println(dimming);
-  //displayGreen.showNumberDecEx(tempSet, 0b01000000, false);
 }
 
 
