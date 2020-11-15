@@ -22,8 +22,8 @@ Encoder myEnc(2, 5); //2 and 3 are interrupt pins in UNO
 TM1637Display displayYellow1(CLK, DIOY1);
 TM1637Display displayGreen(CLK, DIOG);
 
-const byte interruptPin = 3;
-int AC_LOAD = 8;             // Output to Opto Triac pin
+const byte DIMMER_INTERRUPT_PIN = 3;
+const int AC_LOAD = 8;             // Output to Opto Triac pin
 volatile int dimming = 128;  // Dimming level (0-128)  0 = ON, 128 = OFF
 
 
@@ -46,7 +46,7 @@ void setup()
 
 void setupPins(){
   pinMode(AC_LOAD, OUTPUT); // Set AC Load pin as output
-  attachInterrupt(digitalPinToInterrupt(interruptPin), cross, FALLING);   
+  attachInterrupt(digitalPinToInterrupt(DIMMER_INTERRUPT_PIN), cross, FALLING);   
   
 }
 
@@ -77,11 +77,9 @@ void loop()  {
         break;
       }
     }
-
   } else {
     Serial.println("The fucking slave is sleeping, wake the motherfucker up!!!!!");
   }
-  
   
 
   
