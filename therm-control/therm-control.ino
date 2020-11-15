@@ -20,12 +20,16 @@ Encoder myEnc(2, 5); //2 and 3 are interrupt pins in UNO
 #define CLK 10
 #define DIOY1 9
 #define DIOG 11
+
+#define ENC_FACTOR 4
+
 TM1637Display displayYellow1(CLK, DIOY1);
 TM1637Display displayGreen(CLK, DIOG);
 
 const byte DIMMER_INTERRUPT_PIN = 3;
 const int AC_LOAD = 8;             // Output to Opto Triac pin
 volatile int dimming = 128;  // Dimming level (0-128)  0 = ON, 128 = OFF
+
 
 
 const byte SLAVE_BUFFER_SIZE = 5;
@@ -106,7 +110,7 @@ bool slaveConnected(int address){
 
 
 long readEncoderValue(){
-  return myEnc.read();
+  return myEnc.read() / ENC_FACTOR;
 }
 
 
