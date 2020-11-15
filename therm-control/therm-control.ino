@@ -1,7 +1,7 @@
 #include <Wire.h>
 
 #include <Encoder.h>
-//#define ENCODER_DO_NOT_USE_INTERRUPTS
+//#define ENCODER_DO_NOT_USE_IdNTERRUPTS
 
 
 /*
