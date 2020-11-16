@@ -37,7 +37,7 @@ void setup() {
 
   }
   for (int i=0; i<count; i++){
-    uint8_t* address;
+    DeviceAddress address;
     sensors.getAddress(address, i);
 
     for (int j=0; j<count; j++){
