@@ -20,6 +20,8 @@ const uint8_t THERMOMETERS_ADDRESSES[THERMOMETERS_COUNT][THERMOMETER_ADDRESS_SIZ
   {0x28, 0x0F, 0x47, 0x79, 0xA2, 0x00, 0x03, 0xE2  }
 };
 
+//{0x28, 0xDE, 0x7A, 0x79, 0xA2, 0x00, 0x03, 0x79} // sens. num 4
+//{0x28, 0x91, 0xA2, 0x79, 0xA2, 0x00, 0x03, 0x48} // sens. num 5 (wired and packaged)
 
 char temp[5];
 
@@ -58,8 +60,8 @@ bool arraysEqual(const uint8_t arr1[], const uint8_t arr2[], const int size){
     if (arr1[i] != arr2[i]){
       return false;
     }
-    return true;
   }
+  return true;
 }
 
 int getThermometerIndex(int thermometerId){
